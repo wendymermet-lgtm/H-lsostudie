@@ -52,3 +52,23 @@ def dashboard(g1,g2,g3) -> None:
     plt.tight_layout()
     plt.subplots_adjust(top=0.85)
     plt.show()
+
+def ci_mean_normal_graph(lo, hi, mean_x) -> None:
+    fig, ax = plt.subplots(figsize = (6,6))
+    ax.errorbar([0],[mean_x],yerr=[[mean_x - lo],[hi - mean_x]],fmt = "o", capsize = 6)
+    ax.set_title("95%- CI for the average (normal -approximation)\n for blood pressure")
+    ax.grid(True, axis = "y", alpha=0.3)
+    ax.set_xticks([0])
+    ax.set_ylabel("Averages in mmHg")
+    ax.set_xticklabels(["Blood Pressure (average)"])
+    plt.show()
+
+def ci_mean_boot_graph(lo, hi, mean_x) -> None:
+    fig, ax = plt.subplots(figsize = (6,6))
+    ax.errorbar([0],[mean_x],yerr=[[mean_x - lo],[hi - mean_x]],fmt = "o", capsize = 6)
+    ax.set_title("95%- CI for the average (bootstrap)\n for blood pressure")
+    ax.grid(True, axis = "y", alpha=0.3)
+    ax.set_xticks([0])
+    ax.set_ylabel("Averages in mmHg")
+    ax.set_xticklabels(["Blood Pressure (average)"])
+    plt.show()
