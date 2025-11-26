@@ -1,7 +1,8 @@
 import src.io_utils as io
 import src.metrics as mt
 import numpy as np
-
+import src.visuals as vis
+from src.io_utils import df
 
 class HealthAnalyzer:
     def __init__(self):
@@ -30,6 +31,14 @@ class HealthAnalyzer:
         print("In column \"cholesterol\":")
         mt.statistics(cholesterol)
         
+    def plot_blood_pressure_histogram(self) -> None:
+        vis.plot_blood_pressure_histogram(df=df)
+
+    def plot_weight_boxplot(self) -> None:
+        vis.plot_weight_boxplot(df=df)
+
+    def plot_smoker_bar_chart(self) -> None:
+        vis.plot_smoker_bar_chart(df=df)
 
    
 
