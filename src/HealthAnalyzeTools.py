@@ -6,6 +6,7 @@ from src.io_utils import df
 from math import sqrt
 from scipy import stats
 import statsmodels.stats.power as power_analysis
+from sklearn.linear_model import LinearRegression
 
 class HealthAnalyzer:
     def __init__(self):
@@ -35,13 +36,13 @@ class HealthAnalyzer:
         mt.statistics(cholesterol)
         
     def plot_blood_pressure_histogram(self) -> None:
-        vis.plot_blood_pressure_histogram(df=df)
+        return vis.plot_blood_pressure_histogram(df=self.df)
 
     def plot_weight_boxplot(self) -> None:
-        vis.plot_weight_boxplot(df=df)
+        return vis.plot_weight_boxplot(df=self.df)
 
     def plot_smoker_bar_chart(self) -> None:
-        vis.plot_smoker_bar_chart(df=df)
+        return vis.plot_smoker_bar_chart(df=self.df)
 
 class HealthStatistics:
     def __init__(self):
@@ -74,7 +75,7 @@ class HealthStatistics:
         return lo, hi, mean_x, s, n
     
     def ci_mean_normal_graph(self, lo, hi, mean_x) -> None:
-        vis.ci_mean_normal_graph(lo, hi, mean_x)
+        return vis.ci_mean_normal_graph(lo, hi, mean_x)
 
     def ci_mean_bootstrap(self, x,B= 5_000,confidence=0.95):
         x = np.asarray(x, dtype = float)
@@ -89,7 +90,7 @@ class HealthStatistics:
         return float(lo), float(hi), float(mean_x)
     
     def ci_mean_boot_graph(self, lo, hi, mean_x) -> None:
-        vis.ci_mean_boot_graph(lo, hi, mean_x)
+        return vis.ci_mean_boot_graph(lo, hi, mean_x)
 
      
     def hypothesis_test_smoker_bp(self):
@@ -120,6 +121,35 @@ class HealthStatistics:
         d = (mu_A - mu_B) / sd_pooled
         n_per_group = min(len(A), len(B))
         return d, n_per_group
+    
+    def plot_regression_weight_bp(self, predictions) -> None:
+        return vis.plot_regression_weight_bp(df=self.df, predictions=predictions)
+    
+    def plot_regression_age_bp(self, predictions) -> None:
+        return vis.plot_regression_age_bp(df=self.df, predictions=predictions)
+    
+    def linear_regression_age_weight_bp(self):
+        x_2d = df[['age', 'weight']].values
+        y = df['systolic_bp'].values
+
+        model = LinearRegression()
+        model.fit(x_2d, y)
+        intercept= model.intercept_
+        coef_age= model.coef_[0]
+        coef_weight= model.coef_[1]
+        r_squared = model.score(x_2d, y)
+        predictions = model.predict(x_2d)
+        return intercept, coef_age, coef_weight, r_squared, predictions
+        
+    def corr_age_weight_bp(self):
+        corr_age_bp = np.corrcoef(df['age'], df['systolic_bp'])[0, 1]
+        corr_weight_bp = np.corrcoef(df['weight'], df['systolic_bp'])[0, 1]
+        return corr_age_bp, corr_weight_bp
+
+
+
+
+
 
 
  
